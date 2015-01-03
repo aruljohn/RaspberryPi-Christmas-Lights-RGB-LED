@@ -1,4 +1,6 @@
-# Controllable Christmas Lights with RGB LED Strip {5 meters}
+# Raspberry Pi powered Controllable Christmas Lights
+
+## Uses 5 meters RGB LED Strip {analog}
 
 This repo has 2 parts:
 
