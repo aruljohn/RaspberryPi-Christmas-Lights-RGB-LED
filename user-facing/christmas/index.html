@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Web Controllable Christmas Lights | Arul John</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="description" content="Web Controllable Christmas Lights on a 5 meter RGB LED.">
+<meta name="keywords" content="">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<style type="text/css">
+body { font-family:Arial,helvetica; }
+#status { display:none; }
+.okay { color:black; }
+.error { color:red; }
+</style>
+</head>
+<body>
+<h1>Christmas Lights</h1>
+<p>This webpage lets you change our Christmas lights.</p>
+<div id="status"></div>
+<h3>Colour List</h3>
+<p><a href="#" class="hexcolour" id="hex_ff0000">RED</p>
+<p><a href="#" class="hexcolour" id="hex_ff0000">GREEN</p>
+<p><a href="#" class="hexcolour" id="hex_ff0000">BLUE</p>
+<p><a href="#" class="hexcolour" id="hex_a4c639">ANDROID GREEN</p>
+</div>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<script>
+$(function() {
+$('.hexcolour').click(function() {
+  event.preventDefault();
+  var colourname = $(this).text();
+  var colourhex = $(this).attr("id");
+  $('#status').html("Changing the colour to " + colourname + ". Please wait...").fadeIn('slow');
+  $.ajax({
+    url: '/christmas/changecolour.php',
+    data: {"hex":colourhex},
+    success: function(jsonstr) {
+      if (jsonstr != '') {
+        json=JSON.parse(jsonstr);
+        if (json.status == false || json.status == 'off') {
+          // Display message and disappear after 4 seconds
+          $('#status').removeClass('okay').addClass('error').html('Sorry, the lights are off. Please try again at 5pm EST.').delay(4000).slideUp('slow');
+        } else {
+          $('#status').removeClass('error').addClass('okay').html(json.status);
+        }
+      }
+    },
+    error: function(req, status, err) { console.log('something went wrong', status, err); },
+    dataType: "text"
+  });
+});
+});
+</script>
+</body>
+</html>
